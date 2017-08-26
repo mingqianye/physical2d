@@ -2,6 +2,12 @@
   (:require [clojure.test :refer :all]
             [physical2d.spec :refer :all]))
 
+(deftest gen-test
+  (testing "generate new body"
+    (print "------------------------------------------------")
+    (print (gen-body))))
+
+
 (deftest a-test
   (testing "new world"
     (is (true? (valid-body? 
