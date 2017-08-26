@@ -5,20 +5,10 @@
 (deftest gen-test
   (testing "generate new body"
     (print "------------------------------------------------")
-    (print (gen-body))))
+    (print (gen-world))))
+
+(deftest sanity-check-test
+  (testing "Sanity check all specs"
+    (is (true? (sanity-check)))))
 
 
-(deftest a-test
-  (testing "new world"
-    (is (true? (valid-body? 
-                 {:location [111 1] 
-                  :velocity [111 1] 
-                  :acceleration [111 1] 
-                  :angle 3 
-                  :angular_velocity -3
-                  :rotational_inertia 3
-                  :mass 1
-                  :fixtures [3]
-                  :body_type :dynamic
-                  
-                  })))))

@@ -6,7 +6,7 @@
 ;;;;;;; common ;;;;;;;
 (s/def ::fraction (s/and number? #(<= 0 % 1)))
 (s/def ::non-negative (s/and number? (complement neg?)))
-(s/def ::2d-vector (s/and (s/cat :x number? :y number?) #(= 2 (count %))))
+(s/def ::2d-vector (s/tuple number? number?))
 (s/def ::location ::2d-vector)
 
 ;;;;;;; shape ;;;;;;;
@@ -15,7 +15,7 @@
 ;(s/def ::vertices (s/and (s/+ ::2d-vector) #(<= 2 (count %) 8)))
 ;(s/def ::polygon  (s/keys :req-un [::shape-type ::vertices]))
 (s/def ::radius (s/and number? pos?))
-(s/def ::circle   (s/keys :req-un [::shape-type ::radius ::location]))
+(s/def ::circle (s/keys :req-un [::shape-type ::radius ::location]))
 (s/def ::shape ::circle)
 
 ;;;;;;; fixture ;;;;;;;
@@ -35,7 +35,7 @@
 (s/def ::mass (s/and number? ::non-negative))
 (s/def ::velocity ::2d-vector)
 (s/def ::acceleration ::2d-vector)
-(s/def ::fixtures (s/and (s/+ ::fixture) #(= 1 (count %))))
+(s/def ::fixtures (s/coll-of ::fixture :count 1))
 (s/def ::body_type #{:dynamic :static :kinematic})
 (s/def ::body (s/keys :req-un [::location 
                                ::velocity 
@@ -47,9 +47,14 @@
                                ::fixtures 
                                ::body_type]))
 
-(defn valid-body? [m]
-  (s/explain ::body m)
-  (s/valid? ::body m))
+;;;;;;; world ;;;;;;;
+(s/def ::origin ::location)
+(s/def ::gravity ::2d-vector)
+(s/def ::bodies (s/coll-of ::body :count 1))
+(s/def ::world (s/keys :req-un [::origin ::gravity ::bodies]))
 
-(defn gen-body []
-  (gen/generate (s/gen ::body)))
+(defn gen-world []
+  (gen/generate (s/gen ::world)))
+
+(defn sanity-check []
+  (s/valid? ::world (gen-world)))
