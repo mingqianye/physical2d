@@ -1,3 +1,6 @@
+### TravisCI
+[![Build Status](https://travis-ci.org/mingqianye/physical2d.svg?branch=master)](https://travis-ci.org/mingqianye/physical2d)
+
 # physical2d
 
 A Clojure library designed to ... well, that part is up to you.
