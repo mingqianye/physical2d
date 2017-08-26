@@ -8,6 +8,7 @@
    :angular_velocity   0
    :rotational_inertia 0
    :mass               1
+   :fixtures           []
    :body_type          :dynamic
    }
   )
