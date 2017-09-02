@@ -51,7 +51,7 @@
 (s/def ::origin ::location)
 (s/def ::gravity ::2d-vector)
 (s/def ::unit-time (s/and number? pos?))
-(s/def ::bodies (s/coll-of ::body :count 1))
+(s/def ::bodies (s/coll-of ::body :count 2))
 (s/def ::world (s/keys :req-un [::origin ::gravity ::unit-time ::bodies]))
 
 (defn generate-body []

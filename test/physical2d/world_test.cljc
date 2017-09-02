@@ -19,3 +19,12 @@
       (is (= (sum old-position old-velocity) new-location))
       )))
 
+(deftest merge-velocity-updates-test
+  (testing "test if I can merge multiple velocity updates"
+      (is (= {:body-id 123 :velocity-delta [1 3]}
+             (merge-velocity-updates
+               {:body-id 123 :velocity-delta [0 1]}
+               {:body-id 123 :velocity-delta [1 2]}
+      )))
+
+))
