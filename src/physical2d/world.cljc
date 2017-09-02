@@ -4,7 +4,7 @@
 
 (defn location-change [body time-spent]
   (let [velocity (get body :velocity)]
-    (update body :location #(math/v+ % velocity))))
+    (update body :location #(math/sum % velocity))))
 
 (defn update-body-locations [world]
   (let [update-body (fn [body] (location-change body (:unit-time world)))]

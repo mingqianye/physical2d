@@ -16,6 +16,6 @@
           old-position (:location old-body)
           new-body     (location-change old-body 1)
           new-location (:location new-body)]
-      (is (= (v+ old-position old-velocity) new-location))
+      (is (= (sum old-position old-velocity) new-location))
       )))
 
