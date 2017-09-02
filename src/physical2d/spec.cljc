@@ -27,6 +27,7 @@
                                   ]))
 
 ;;;;;;; body ;;;;;;;
+(s/def ::body-id string?)
 (s/def ::angle number?)
 (s/def ::angular_velocity number?)
 (s/def ::rotational_inertia number?)
@@ -34,8 +35,9 @@
 (s/def ::velocity ::2d-vector)
 (s/def ::acceleration ::2d-vector)
 (s/def ::fixtures (s/coll-of ::fixture :count 1))
-(s/def ::body_type #{:dynamic :static :kinematic})
-(s/def ::body (s/keys :req-un [::location 
+(s/def ::body-type #{:dynamic :static :kinematic})
+(s/def ::body (s/keys :req-un [::body-id
+                               ::location 
                                ::velocity 
                                ::acceleration 
                                ::angle 
@@ -43,7 +45,7 @@
                                ::rotational_inertia 
                                ::mass 
                                ::fixtures 
-                               ::body_type]))
+                               ::body-type]))
 
 ;;;;;;; world ;;;;;;;
 (s/def ::origin ::location)
