@@ -12,8 +12,6 @@
 ;;;;;;; shape ;;;;;;;
 
 (s/def ::shape-type #{:circle})
-;(s/def ::vertices (s/and (s/+ ::2d-vector) #(<= 2 (count %) 8)))
-;(s/def ::polygon  (s/keys :req-un [::shape-type ::vertices]))
 (s/def ::radius (s/and number? pos?))
 (s/def ::circle (s/keys :req-un [::shape-type ::radius ::location]))
 (s/def ::shape ::circle)
@@ -50,11 +48,19 @@
 ;;;;;;; world ;;;;;;;
 (s/def ::origin ::location)
 (s/def ::gravity ::2d-vector)
+(s/def ::unit-time (s/and number? pos?))
 (s/def ::bodies (s/coll-of ::body :count 1))
-(s/def ::world (s/keys :req-un [::origin ::gravity ::bodies]))
+(s/def ::world (s/keys :req-un [::origin ::gravity ::unit-time ::bodies]))
 
-(defn gen-world []
+(defn generate-body []
+  (gen/generate (s/gen ::body)))
+
+(defn generate-world []
   (gen/generate (s/gen ::world)))
 
+(defn validate-world [world]
+  (s/valid? ::world world))
+
+
 (defn sanity-check []
-  (s/valid? ::world (gen-world)))
+  (s/valid? ::world (generate-world)))

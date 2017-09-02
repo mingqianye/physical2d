@@ -5,7 +5,7 @@
 (deftest gen-test
   (testing "generate new body"
     (print "------------------------------------------------")
-    (print (gen-world))))
+    (print (generate-world))))
 
 (deftest sanity-check-test
   (testing "Sanity check all specs"
