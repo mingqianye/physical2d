@@ -3,51 +3,41 @@
 
 ;;;;;; updates the velocity for all bodies ;;;;;;
 
-(defn compute-velocity-update [body1 body2]
-  (let [body1-update {:body-id (:body-id body1) :velocity-delta [0 0]}
-        body2-update {:body-id (:body-id body2) :velocity-delta [0 0]}]
-    [body1-update body2-update]))
+(defn compute-new-bodies [bodies]
+  "given a tuple of bodies e.g. [body1 body2], return a tuple of new bodies [body1-new body2-new] due to collision"
+  (let [[body1 body2] bodies]
+    [body1 body2]))
 
-(defn get-velocity-updates [bodies]
-  (let [paired-bodies (math/combos-of-2 bodies)
-        velocity-update-for-pairs (fn [body-pair] (compute-velocity-update (first body-pair) (last body-pair)))]
-    (mapcat velocity-update-for-pairs paired-bodies)))
+(defn reduce-new-bodies [bodies]
+  "Combine the bodies with the same body-id"
+  bodies)
 
-(defn merge-velocity-updates [& updates]
-  {:body-id (:body-id (first updates)) 
-   ;:velocity-delta (math/sum (map :velocity-delta updates))}
-   :velocity-delta (->> updates
-                        (map :velocity-delta)
-                        (reduce math/sum)
-)}
-
-)
-
-(defn velocity-change [bodies]
-  (let [all-velocity-updates (get-velocity-updates bodies)
-        collapse-updates (->> all-velocity-updates 
-                              (group-by :body-id))]
-    bodies
-))
+(defn update-velocity-for-all-bodies [bodies]
+  "Given a collection of bodies, compute the new bodies after collision"
+  (->> bodies
+    (math/combos-of-2)
+    (mapcat compute-new-bodies)
+    (reduce-new-bodies)))
 
 (defn update-collided-bodies [world]
-  (update world :bodies #(velocity-change %)))
+  (update world :bodies #(update-velocity-for-all-bodies %)))
 
 
 ;;;;;;; updates locations for all bodies ;;;;;;;;
 
-(defn location-change [body time-spent]
+(defn update-body-location [body time-spent]
+  "Given a body and the unit of time passed, compute the its new location"
   (let [velocity (get body :velocity)]
     (update body :location #(math/sum % velocity))))
 
-(defn update-body-locations [world]
-  (let [update-body (fn [body] (location-change body (:unit-time world)))]
+(defn update-location-for-all-bodies [world]
+  (let [update-body (fn [body] (update-body-location body (:unit-time world)))]
     (update world :bodies #(mapv update-body %))))
 
 ;;;;;;; main functions ;;;;;;;
 
 (def next-frame-func
-  (comp update-body-locations 
+  (comp update-location-for-all-bodies 
         update-collided-bodies))
 
 (defn next-frame [world]
