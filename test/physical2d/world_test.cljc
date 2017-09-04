@@ -19,3 +19,12 @@
       (is (= (sum old-position old-velocity) new-location))
       )))
 
+
+(deftest combine-velocities-test
+  (testing "test we can combine velocities"
+    (let [bodies [{:blah :a :velocity [1 2]} 
+                  {:blah :a :velocity [2 3]}
+                  {:blah :a :velocity [4 3]}
+         ]]  
+      (is (= {:blah :a :velocity [7 8]} (combine-velocities bodies)))
+      )))

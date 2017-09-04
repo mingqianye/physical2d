@@ -8,9 +8,20 @@
   (let [[body1 body2] bodies]
     [body1 body2]))
 
+(defn combine-velocities [bodies]
+  (-> (first bodies)
+      (assoc :velocity (apply math/sum (map :velocity bodies)))))
+
 (defn reduce-new-bodies [bodies]
-  "Combine the bodies with the same body-id"
-  bodies)
+  "Combine the bodies with the same body-id: sum their velocities"
+  (->> bodies
+    (group-by :body-id)
+    (vals)
+    (map combine-velocities)
+  )
+)
+    
+  
 
 (defn update-velocity-for-all-bodies [bodies]
   "Given a collection of bodies, compute the new bodies after collision"
