@@ -28,3 +28,13 @@
          ]]  
       (is (= {:blah :a :velocity [7 8]} (combine-velocities bodies)))
       )))
+
+(deftest reduce-new-bodies-test
+  (testing "test new bodies can be group by body-id and sum their velocities"
+    (let [bodies [{:body-id 1 :velocity [1 2]}
+                  {:body-id 2 :velocity [3 4]}
+                  {:body-id 1 :velocity [5 6]}
+                  {:body-id 3 :velocity [7 8]}]]
+      (is (= [{:body-id 1 :velocity [6 8]}
+              {:body-id 2 :velocity [3 4]}
+              {:body-id 3 :velocity [7 8]}] (reduce-new-bodies bodies))))))
